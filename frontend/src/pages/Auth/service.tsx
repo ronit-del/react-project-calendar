@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/auth';
+const url = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
     baseURL: url,
@@ -9,9 +9,9 @@ const api = axios.create({
     },
 });
 
-export const login = async () => {
+export const login = async (data: any) => {
     try {
-        const response = await api.get('/login');
+        const response = await api.post('/login', data);
         return response;
     } catch (error) {
         console.error('Error logging in:', error);

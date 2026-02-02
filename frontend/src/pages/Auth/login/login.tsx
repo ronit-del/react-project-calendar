@@ -16,6 +16,7 @@ import { login } from '../service.tsx';
 import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../AuthLayout';
 import './login.css';
+import { toast } from "react-toastify";
 
 function Login() {
     const navigate = useNavigate();
@@ -32,19 +33,22 @@ function Login() {
         setLoading(true);
         
         try {
-            const response = await login();
-            if (response.status === 200) {
-                navigate('/home');
+            const response = await login({ email, password });
+            if (response && response.data && response.data.status === 200) {
+                toast.success(response.data.message);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 1000);
+                setLoading(false);
+            } else {
+                setError(response.data.message || "Invalid credentials. Please try again.");
+                toast.error(response.data.message || "Invalid credentials. Please try again.");
+                setLoading(false);
             }
         } catch (error: any) {
             setError(error.response?.data?.message || "Invalid credentials. Please try again.");
-        } finally {
             setLoading(false);
         }
-    };
-
-    const handleTogglePassword = () => {
-        setShowPassword((prev) => !prev);
     };
 
     return (
@@ -58,12 +62,6 @@ function Login() {
                         Enter your credentials to access your account
                     </Typography>
                 </Box>
-
-                {error && (
-                    <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
-                        {error}
-                    </Alert>
-                )}
 
                 <Box component="form" onSubmit={handleSubmit} className="auth-form">
                     <TextField
@@ -112,7 +110,7 @@ function Login() {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
-                                        onClick={handleTogglePassword}
+                                        onClick={() => setShowPassword(!showPassword)}
                                         edge="end"
                                         aria-label={showPassword ? "Hide password" : "Show password"}
                                         className="password-toggle"
@@ -131,6 +129,16 @@ function Login() {
                             },
                         }}
                     />
+
+                    {error && (
+                        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                            {error.split('\n').map((err: string, index: number) => (
+                                <Box key={index} component="div" sx={{ mb: index < error.split('\n').length - 1 ? 0.5 : 0 }}>
+                                    • {err}
+                                </Box>
+                            ))}
+                        </Alert>
+                    )}
 
                     <Box className="auth-actions">
                         <Link 
