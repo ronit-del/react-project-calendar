@@ -1,0 +1,172 @@
+.dashboard-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.dashboard-appbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3) !important;
+}
+
+.dashboard-toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px !important;
+}
+
+.dashboard-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-icon {
+    font-size: 28px !important;
+    color: #ffffff;
+}
+
+.dashboard-title {
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-icon-button {
+    transition: transform 0.2s ease !important;
+}
+
+.profile-icon-button:hover {
+    transform: scale(1.1);
+}
+
+.profile-avatar {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease !important;
+}
+
+.profile-avatar:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.logout-icon-button {
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+    padding: 8px !important;
+}
+
+.logout-icon-button:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-2px);
+}
+
+.profile-menu {
+    margin-top: 8px;
+}
+
+.profile-menu .MuiMenuItem-root {
+    padding: 12px 20px !important;
+    gap: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.profile-menu .MuiMenuItem-root:hover {
+    background-color: #f5f5f5;
+}
+
+.menu-icon {
+    font-size: 20px !important;
+    color: #667eea;
+}
+
+.dashboard-content {
+    padding: 40px 24px !important;
+    margin-top: 20px;
+}
+
+.dashboard-paper {
+    padding: 40px !important;
+    text-align: center;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-paper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dashboard-welcome {
+    color: #333 !important;
+    font-weight: 600 !important;
+    margin-bottom: 16px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dashboard-subtitle {
+    color: #666 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dashboard-toolbar {
+        padding: 0 16px !important;
+    }
+
+    .dashboard-title {
+        font-size: 1.1rem !important;
+    }
+
+    .dashboard-content {
+        padding: 24px 16px !important;
+    }
+
+    .dashboard-paper {
+        padding: 24px !important;
+    }
+
+    .dashboard-welcome {
+        font-size: 1.8rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-logo-section {
+        gap: 8px;
+    }
+
+    .dashboard-icon {
+        font-size: 24px !important;
+    }
+
+    .dashboard-title {
+        font-size: 1rem !important;
+    }
+
+    .dashboard-actions {
+        gap: 8px;
+    }
+
+    .profile-avatar {
+        width: 36px !important;
+        height: 36px !important;
+    }
+}

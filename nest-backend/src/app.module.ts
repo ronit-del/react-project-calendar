@@ -16,11 +16,8 @@ if (!mongoUri) {
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(mongoUri, {
-      // Auto-create database and collections
       autoCreate: true,
-      // Auto-index creation (creates indexes defined in schemas)
       autoIndex: true,
-      // Connection options
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     }),
@@ -29,4 +26,4 @@ if (!mongoUri) {
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

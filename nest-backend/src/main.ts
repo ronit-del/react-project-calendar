@@ -24,7 +24,7 @@ async function bootstrap() {
   );
 
   const connection = app.get<Connection>(getConnectionToken());
-  
+
   connection.on('connected', () => {
     console.log('✅ MongoDB connected successfully');
     if (connection.db) {
