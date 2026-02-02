@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import dotenv from 'dotenv';
 import { Connection } from 'mongoose';
@@ -11,10 +12,19 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Get MongoDB connection
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
   const connection = app.get<Connection>(getConnectionToken());
   
-  // Log connection status
   connection.on('connected', () => {
     console.log('✅ MongoDB connected successfully');
     if (connection.db) {
