@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { MailModule } from './mail/mail.module';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -16,14 +17,15 @@ if (!mongoUri) {
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(mongoUri, {
       autoCreate: true,
       autoIndex: true,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     }),
-    AuthModule
+    AuthModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService],

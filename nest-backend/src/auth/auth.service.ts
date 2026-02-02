@@ -4,12 +4,14 @@ import { AuthDto } from './dto/auth.dto';
 import bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly userService: UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private readonly mailService: MailService
     ) { }
 
     async login(loginDto: LoginDto) {
@@ -29,11 +31,13 @@ export class AuthService {
             const payload = { sub: user._id, username: email };
             const token = await this.jwtService.signAsync(payload);
 
+            await this.mailService.sendEmail(email, 'Login successful', 'Login successful');
+
             return {
                 message: 'Login successful',
                 status: 200,
                 user: user,
-                    token: token,
+                token: token,
             };
         } catch (error) {
             throw new InternalServerErrorException(error || 'Error logging in');
