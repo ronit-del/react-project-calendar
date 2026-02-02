@@ -22,7 +22,7 @@ export class AuthDto {
     },
     {
       message:
-        'Password is not must be strong. It must contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbole',
+        'Password must contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbole',
     },
   )
   password: string;
