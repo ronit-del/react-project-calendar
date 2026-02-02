@@ -31,6 +31,7 @@ import AuthLayout from "../AuthLayout";
 import { country } from "../../../assets/countryCode";
 import './signup.css';
 import { register } from "../service";
+import { toast } from "react-toastify";
 
 function Signup() {
     const navigate = useNavigate();
@@ -88,19 +89,45 @@ function Signup() {
             return;
         }
 
-        console.log('formData', formData)
+        
+        const payLoad: any = {
+            ...formData,
+            role: 'user',
+            phone: `${formData.countryCode} ${formData.phone}`,
+        }
+
+        delete payLoad?.confirmPassword;
+        delete payLoad?.countryCode;
 
         try {
-            register(formData).then((response: any) => {
-                console.log('response', response)
-                if (response.status === 200) {
-                    navigate('/login');
+            register(payLoad).then((response: any) => {
+                if (response && response.data.status === 200) {
+                    toast.success('Account created successfully. Please login to continue');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1000);
                 } else {
-                    setError(response.data.message);
+                    toast.error(response.data.message);
+                }
+            }).catch((error: any) => {
+                const errorMessage = error.response?.data?.message;
+                if (Array.isArray(errorMessage)) {
+                    setError(errorMessage.join('\n'));
+                } else if (errorMessage) {
+                    setError(errorMessage);
+                } else {
+                    setError("Something went wrong. Please try again.");
                 }
             });
         } catch (error: any) {
-            setError(error.response?.data?.message || "Something went wrong. Please try again.");
+            const errorMessage = error.response?.data?.message;
+            if (Array.isArray(errorMessage)) {
+                setError(errorMessage.join('\n'));
+            } else if (errorMessage) {
+                setError(errorMessage);
+            } else {
+                setError("Something went wrong. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
@@ -437,7 +464,13 @@ function Signup() {
 
                     {error && (
                         <Alert severity="error" sx={{ mt: 3, mb: 2, borderRadius: 2 }}>
-                            {error}
+                            <Box component="div" sx={{ whiteSpace: 'pre-line' }}>
+                                {error.split('\n').map((err: string, index: number) => (
+                                    <Box key={index} component="div" sx={{ mb: index < error.split('\n').length - 1 ? 0.5 : 0 }}>
+                                        • {err}
+                                    </Box>
+                                ))}
+                            </Box>
                         </Alert>
                     )}
 
