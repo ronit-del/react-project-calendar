@@ -35,6 +35,7 @@ function Login() {
         try {
             const response = await login({ email, password });
             if (response && response.data && response.data.status === 200) {
+                localStorage.setItem('token', response.data.token);
                 toast.success(response.data.message);
                 setTimeout(() => {
                     navigate('/home');

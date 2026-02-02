@@ -28,3 +28,17 @@ export const register = async (data: any) => {
         throw error;
     }
 };
+
+export const getUser = async () => {
+    try {
+        const response = await api.get('/getAllUsers', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error('Error getting user:', error);
+        throw error;
+    }
+};

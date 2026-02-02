@@ -21,4 +21,8 @@ export class UserService {
     deleteUser(id: string) {
         return this.userModel.findByIdAndDelete(id);
     }
+
+    getAllUsers() {
+        return this.userModel.find({ role: { $ne: 'admin' } });
+    }
 }

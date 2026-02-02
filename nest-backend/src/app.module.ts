@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthMiddleware } from './middleware/auth.middleware';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -21,9 +23,16 @@ if (!mongoUri) {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     }),
-    AuthModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('/api/login', '/api/register')
+      .forRoutes('*');
+  }
+}

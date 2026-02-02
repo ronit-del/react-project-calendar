@@ -20,6 +20,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './home.css';
+import { getUser } from '../../Auth/service';
 
 function Home() {
     const navigate = useNavigate();
@@ -36,9 +37,17 @@ function Home() {
 
     const handleLogout = () => {
         handleMenuClose();
-        // Clear any stored tokens or user data here if needed
-        // localStorage.clear();
-        toast.success('Logged out successfully');
+        getUser().then((response) => {
+            if (response && response.data && response.data.status === 200) {
+                toast.success('Logged out successfully');
+                localStorage.removeItem('token');
+                navigate('/login');
+            } else {
+                toast.error(response.data.message || 'Error logging out');
+            }
+        }).catch((error) => {
+            toast.error(error.response?.data?.message || 'Error logging out');
+        });
         setTimeout(() => {
             navigate('/login');
         }, 1000);

@@ -1,56 +1,85 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { AuthDto } from './dto/auth.dto';
 import bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService) { }
+    constructor(
+        private readonly userService: UserService,
+        private jwtService: JwtService
+    ) { }
 
     async login(loginDto: LoginDto) {
-        const { email, password } = loginDto;
-        const user = await this.userService.getUserByEmail(email);
+        try {
+            const { email, password } = loginDto;
+            const user = await this.userService.getUserByEmail(email);
 
-        if (!user) {
-            throw new UnauthorizedException('User not found');
+            if (!user) {
+                throw new UnauthorizedException('User not found');
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                throw new UnauthorizedException('Invalid password');
+            }
+
+            const payload = { sub: user._id, username: email };
+            const token = await this.jwtService.signAsync(payload);
+
+            return {
+                message: 'Login successful',
+                status: 200,
+                user: user,
+                    token: token,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error || 'Error logging in');
         }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            throw new UnauthorizedException('Invalid password');
-        }
-
-        return {
-            message: 'Login successful',
-            status: 200,
-            user: user,
-        };
     }
 
     async register(registerDto: AuthDto) {
-        const { email, password } = registerDto;
+        try {
+            const { email, password } = registerDto;
 
-        const existingUser = await this.userService.getUserByEmail(email);
-        if (existingUser) {
-            throw new ConflictException('User already exists');
+            const existingUser = await this.userService.getUserByEmail(email);
+            if (existingUser) {
+                throw new ConflictException('User already exists');
+            }
+
+            if (!password) {
+                throw new UnauthorizedException('Password is required');
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const user = await this.userService.createUser({
+                ...registerDto,
+                password: hashedPassword,
+            });
+
+            return {
+                message: 'User registered successfully',
+                status: 200,
+                user,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error || 'Error registering');
         }
+    }
 
-        if (!password) {
-            throw new UnauthorizedException('Password is required');
+    async getAllUsers() {
+        try {
+            const users = await this.userService.getAllUsers();
+            return {
+                message: 'Users fetched successfully',
+                status: 200,
+                users,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error || 'Error fetching users');
         }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await this.userService.createUser({
-            ...registerDto,
-            password: hashedPassword,
-        });
-
-        return {
-            message: 'User registered successfully',
-            status: 200,
-            user,
-        };
     }
 }
