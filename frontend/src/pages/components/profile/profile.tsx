@@ -13,6 +13,7 @@ import {
     InputAdornment,
     FormControl,
     Autocomplete,
+    CircularProgress,
 } from '@mui/material';
 import { 
     Menu as MenuIcon,
@@ -43,6 +44,7 @@ function Profile() {
     const [user, setUser] = useState<any>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -59,8 +61,8 @@ function Profile() {
         if (hasFetchedRef.current) return;
         hasFetchedRef.current = true;
 
-        try {
-            getUser().then((response) => {
+        getUser()
+            .then((response) => {
                 if (response.data.status === 200) {
                     const userData = response.data.user;
                     const [countryCode, phoneNumber] = userData && userData?.phone ? userData.phone.split(' ') : ['', ''];
@@ -79,34 +81,20 @@ function Profile() {
                 } else {
                     toast.error(response.data.message);
                 }
-            }).catch((error) => {
+                setLoading(false);
+            })
+            .catch((error) => {
                 if (error.response?.data?.message === 'Session expired. Please login again.') {
                     toast.error(error.response.data.message);
                     localStorage.removeItem('token');
                     setTimeout(() => {
                         navigate('/login');
                     }, 1000);
-                }
-                else {
+                } else {
                     toast.error(error.response?.data?.message || 'Failed to load profile');
                 }
+                setLoading(false);
             });
-        } catch (error: any) {
-            if (error.response) {
-                if (error.response.data.message === 'Session expired. Please login again.') {
-                    toast.error(error.response.data.message);
-                    localStorage.removeItem('token');
-                    setTimeout(() => {
-                        navigate('/login');
-                    }, 1000);
-                }
-                else {
-                    toast.error(error.response.data.message);
-                }
-            } else {
-                toast.error(error.message);
-            }
-        }
     }, [navigate]);
 
     const handleSelectChange = (e: any) => {
@@ -114,12 +102,6 @@ function Profile() {
             ...formData,
             [e.target.name]: e.target.value,
         });
-    };
-
-    const handleProfileClick = () => {
-        if (isMobile) {
-            setSidebarOpen(false);
-        }
     };
 
     const toggleSidebar = () => {
@@ -201,7 +183,6 @@ function Profile() {
             <Sidebar 
                 isOpen={sidebarOpen} 
                 onClose={closeSidebar}
-                onProfileClick={handleProfileClick}
                 isMobile={isMobile}
             />
             {sidebarOpen && <Box className="sidebar-overlay" onClick={closeSidebar} />}
@@ -217,6 +198,18 @@ function Profile() {
                 </Box>
                 <Box className="dashboard-content-wrapper profile-wrapper">
                     <Container maxWidth="lg" className="dashboard-content">
+                        {loading ? (
+                            <Box 
+                                sx={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'center', 
+                                    alignItems: 'center', 
+                                    minHeight: '60vh' 
+                                }}
+                            >
+                                <CircularProgress size={60} sx={{ color: '#667eea' }} />
+                            </Box>
+                        ) : (
                             <Box className="profile-container">
 
                             <Paper elevation={3} className="profile-header-card">
@@ -526,6 +519,7 @@ function Profile() {
                                 </Box>
                             </Paper>
                         </Box>
+                        )}
                     </Container>
                 </Box>
             </Box>

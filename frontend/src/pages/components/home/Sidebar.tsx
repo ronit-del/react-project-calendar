@@ -1,5 +1,5 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
-import { AccountCircle, Logout, Dashboard as DashboardIcon, Close as CloseIcon } from '@mui/icons-material';
+import { AccountCircle, Logout, Dashboard as DashboardIcon, Close as CloseIcon, BookOutlined as BookIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getUser } from '../../Auth/service';
@@ -8,11 +8,10 @@ import './Sidebar.css';
 interface SidebarProps {
     isOpen?: boolean;
     onClose?: () => void;
-    onProfileClick?: () => void;
     isMobile?: boolean;
 }
 
-function Sidebar({ isOpen = false, onClose, onProfileClick, isMobile = false }: SidebarProps) {
+function Sidebar({ isOpen = false, onClose, isMobile = false }: SidebarProps) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -36,11 +35,15 @@ function Sidebar({ isOpen = false, onClose, onProfileClick, isMobile = false }: 
     };
 
     const handleProfile = () => {
-        if (onProfileClick) {
-            onProfileClick();
-        } else {
-            navigate('/profile');
+        navigate('/profile');
+        // Only close sidebar on mobile if it is open
+        if (isMobile && onClose) {
+            onClose();
         }
+    };
+
+    const handleCreateBook = () => {
+        navigate('/create-book');
         // Only close sidebar on mobile
         if (isMobile && onClose) {
             onClose();
@@ -83,6 +86,20 @@ function Sidebar({ isOpen = false, onClose, onProfileClick, isMobile = false }: 
                             </ListItemIcon>
                             <ListItemText 
                                 primary="Dashboard" 
+                                className="sidebar-text"
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding className="sidebar-list-item">
+                        <ListItemButton 
+                            className="sidebar-button"
+                            onClick={handleCreateBook}
+                        >
+                            <ListItemIcon className="sidebar-icon">
+                                <BookIcon />
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary="Create Book" 
                                 className="sidebar-text"
                             />
                         </ListItemButton>

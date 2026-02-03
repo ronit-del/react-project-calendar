@@ -8,6 +8,7 @@ import Home from './pages/components/home/home';
 import ResetPassword from './pages/Auth/reset-password/reset-password';
 import { ResetPasswordGuard } from './pages/Auth/reset-password/ResetPasswordGuard';
 import Profile from './pages/components/profile/profile';
+import CreateBook from './pages/components/create-book/create-book';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/reset-password' element={<ResetPasswordGuard><ResetPassword /></ResetPasswordGuard>}></Route>
         <Route path='/home' element={<Home />}></Route>
         <Route path='/profile' element={<Profile />}></Route>
+        <Route path='/create-book' element={<CreateBook />}></Route>
       </Routes>
       <ToastContainer
         position="top-right"

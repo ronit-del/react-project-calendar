@@ -76,3 +76,17 @@ export const updateUserProfile = async (user: any) => {
         throw error;
     }
 };
+
+export const createBook = async (book: any) => {
+    try {
+        const response = await api.post('/create-book', book, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error('Error creating book:', error);
+        throw error;
+    }
+};

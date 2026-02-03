@@ -1,0 +1,230 @@
+/* Override root styles for book container */
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    place-items: unset !important;
+}
+
+#root:has(.book-container) {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+}
+
+.book-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.book-content-wrapper {
+    flex: 1;
+    margin-left: 260px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 260px);
+    overflow-x: hidden;
+    display: flex;
+    align-items: flex-start;
+    padding: 24px 0;
+    box-sizing: border-box;
+}
+
+.book-header-mobile {
+    display: none;
+    padding: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-toggle-button {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.menu-toggle-button:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.1);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.book-content {
+    padding: 24px !important;
+    margin: 0 !important;
+    width: 100%;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.book-content .MuiContainer-root {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    box-sizing: border-box;
+}
+
+.book-paper {
+    padding: 40px !important;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    margin: 0;
+}
+
+.book-paper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.book-welcome {
+    color: #333 !important;
+    font-weight: 600 !important;
+    margin-bottom: 16px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+}
+
+.book-subtitle {
+    color: #666 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.error-message {
+    padding: 12px;
+    background-color: #ffebee;
+    border-radius: 8px;
+    border-left: 4px solid #f44336;
+}
+
+/* Form styling */
+.book-paper .MuiTextField-root {
+    margin-bottom: 0;
+}
+
+.book-paper .MuiInputBase-root {
+    border-radius: 8px;
+}
+
+.book-paper .MuiInputAdornment-root {
+    margin-right: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .book-content-wrapper {
+        margin-left: 0;
+        width: 100%;
+        padding: 16px 0;
+    }
+
+    .book-header-mobile {
+        display: block;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .book-content {
+        padding: 16px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .book-content .MuiContainer-root {
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+    }
+
+    .book-paper {
+        padding: 24px !important;
+        width: 100%;
+        margin: 0;
+    }
+
+    .book-welcome {
+        font-size: 1.8rem !important;
+    }
+
+    .book-subtitle {
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-content-wrapper {
+        margin-left: 0;
+        width: 100%;
+        padding: 12px 0;
+    }
+
+    .book-content {
+        padding: 12px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .book-content .MuiContainer-root {
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+    }
+
+    .book-paper {
+        padding: 20px !important;
+        width: 100%;
+        margin: 0;
+    }
+
+    .book-welcome {
+        font-size: 1.6rem !important;
+    }
+
+    .book-subtitle {
+        font-size: 0.9rem !important;
+    }
+}

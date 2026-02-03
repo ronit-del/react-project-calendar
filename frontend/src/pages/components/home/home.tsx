@@ -65,14 +65,6 @@ function Home() {
         }
     }, []);
 
-    const handleProfileClick = () => {
-        navigate('/profile');
-        // Only close sidebar on mobile
-        if (isMobile) {
-            setSidebarOpen(false);
-        }
-    };
-
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
@@ -86,7 +78,6 @@ function Home() {
             <Sidebar 
                 isOpen={sidebarOpen} 
                 onClose={closeSidebar}
-                onProfileClick={handleProfileClick}
                 isMobile={isMobile}
             />
             {sidebarOpen && <Box className="sidebar-overlay" onClick={closeSidebar} />}
