@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { PasswordDto } from './dto/password.dto';
+import { Request } from 'express';
 
 @Controller('api')
 export class AuthController {
@@ -18,9 +19,9 @@ export class AuthController {
         return this.authService.register(registerDto, origin);
     }
 
-    @Get('/getAllUsers')
-    getAllUsers() {
-        return this.authService.getAllUsers();
+    @Get('/getUser')
+    getUser(@Req() req: Request & { user: any }) {
+        return this.authService.getUserById(req['user']?.sub as string);
     }
 
     @Post('/forgot-password')

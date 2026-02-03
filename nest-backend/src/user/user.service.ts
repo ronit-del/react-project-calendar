@@ -26,6 +26,10 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id);
     }
 
+    getUser(id) {
+        return this.userModel.findById(id);
+    }
+
     getAllUsers() {
         return this.userModel.find({ role: { $ne: 'admin' } });
     }

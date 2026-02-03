@@ -1,0 +1,169 @@
+.sidebar-container {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 4px 0 20px rgba(102, 126, 234, 0.3);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 20px;
+    color: #ffffff;
+    position: relative;
+}
+
+.sidebar-close-button {
+    display: none !important;
+    position: absolute;
+    right: 12px;
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.sidebar-close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.1);
+}
+
+.sidebar-logo-icon {
+    font-size: 32px !important;
+    color: #ffffff !important;
+}
+
+.sidebar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-divider {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    margin: 0 16px !important;
+}
+
+.sidebar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 8px 8px 8px;
+}
+
+.sidebar-list {
+    padding: 0 !important;
+    margin-top: 8px;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-list-item {
+    margin-bottom: 8px;
+}
+
+.sidebar-button {
+    border-radius: 12px !important;
+    margin: 0 8px !important;
+    padding: 14px 16px !important;
+    transition: all 0.3s ease !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sidebar-button:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateX(4px);
+    color: #ffffff !important;
+}
+
+.sidebar-button.Mui-selected {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.sidebar-logout-button {
+    margin-top: auto !important;
+}
+
+.sidebar-icon {
+    min-width: 40px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sidebar-button:hover .sidebar-icon {
+    color: #ffffff !important;
+}
+
+.sidebar-text {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sidebar-button:hover .sidebar-text {
+    color: #ffffff !important;
+}
+
+.sidebar-text .MuiListItemText-primary {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Desktop - hide close button */
+@media (min-width: 769px) {
+    .sidebar-close-button {
+        display: none !important;
+        visibility: hidden !important;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sidebar-container {
+        transform: translateX(-100%);
+        width: 100%;
+        box-shadow: 4px 0 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .sidebar-container.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-close-button {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .sidebar-title {
+        font-size: 1.3rem;
+    }
+
+    .sidebar-logo-icon {
+        font-size: 28px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-container {
+        width: 100%;
+    }
+
+    .sidebar-header {
+        padding: 20px 16px;
+    }
+
+    .sidebar-title {
+        font-size: 1.2rem;
+    }
+}
+

@@ -31,7 +31,7 @@ export const register = async (data: any) => {
 
 export const getUser = async () => {
     try {
-        const response = await api.get('/getAllUsers', {
+        const response = await api.get('/getUser', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }

@@ -86,6 +86,22 @@ export class AuthService {
         }
     }
 
+    async getUserById(id: string) {
+        try {
+            const user = await this.userService.getUser(id);
+            if (!user) {
+                throw new UnauthorizedException('User not found');
+            }
+            return {
+                message: 'User fetched successfully',
+                status: 200,
+                user,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error || 'Error fetching users');
+        }
+    }
+
     async getAllUsers() {
         try {
             const users = await this.userService.getAllUsers();

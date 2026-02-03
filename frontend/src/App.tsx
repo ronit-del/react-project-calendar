@@ -7,6 +7,7 @@ import ForgotPassword from './pages/Auth/forgot-password/forgot-password';
 import Home from './pages/components/home/home';
 import ResetPassword from './pages/Auth/reset-password/reset-password';
 import { ResetPasswordGuard } from './pages/Auth/reset-password/ResetPasswordGuard';
+import Profile from './pages/components/profile/profile';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path='/forgot-password' element={<ForgotPassword />}></Route>
         <Route path='/reset-password' element={<ResetPasswordGuard><ResetPassword /></ResetPasswordGuard>}></Route>
         <Route path='/home' element={<Home />}></Route>
+        <Route path='/profile' element={<Profile />}></Route>
       </Routes>
       <ToastContainer
         position="top-right"
