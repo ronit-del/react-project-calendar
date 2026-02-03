@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useRef } from 'react';
 import {
     AppBar,
     Toolbar,
@@ -26,6 +27,7 @@ function Home() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const hasFetchedRef = useRef(false);
 
     const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -34,6 +36,50 @@ function Home() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+
+    const [_, setUser] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    useEffect(() => {
+        if (hasFetchedRef.current) return;
+        hasFetchedRef.current = true;
+
+        try {
+            getUser().then((response) => {
+                if (response.data.status === 200) {
+                    setUser(response.data.data);
+                } else {
+                    toast.error(response.data.message);
+                }
+            }).catch((error) => {
+                if (error.response.data.message === 'Session expired. Please login again.') {
+                    toast.error(error.response.data.message);
+                    localStorage.removeItem('token');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1000);
+                }
+                else {
+                    toast.error(error.response.data.message);
+                }
+            });
+        } catch (error: any) {
+            if (error.response) {
+                if (error.response.data.message === 'Session expired. Please login again.') {
+                    toast.error(error.response.data.message);
+                    localStorage.removeItem('token');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1000);
+                }
+                else {
+                    toast.error(error.response.data.message);
+                }
+            } else {
+                toast.error(error.message);
+            }
+        }
+    }, []);
 
     const handleLogout = () => {
         handleMenuClose();

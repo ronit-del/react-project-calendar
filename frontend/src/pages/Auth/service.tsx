@@ -37,8 +37,8 @@ export const getUser = async () => {
             }
         });
         return response;
-    } catch (error) {
-        console.error('Error getting user:', error);
+    } catch (error: any) {
+        console.error('Error getting user:', error.response || error.message);
         throw error;
     }
 };
