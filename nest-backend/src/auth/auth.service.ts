@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 import { PasswordDto } from './dto/password.dto';
+import { User } from 'src/schema/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -170,6 +171,22 @@ export class AuthService {
             };
         } catch (error) {
             throw new InternalServerErrorException(error || 'Error updating password');
+        }
+    }
+
+    async updateUserProfile(id: string, user: any) {
+        try {
+            const updatedUser = await this.userService.updateUser(id, user as User);
+            if (!updatedUser) {
+                throw new UnauthorizedException('User not found');
+            }
+            return {
+                message: 'User profile updated successfully',
+                status: 200,
+                user: updatedUser,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(error || 'Error updating user profile');
         }
     }
 }

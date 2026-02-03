@@ -62,3 +62,17 @@ export const resetPassword = async (data: any) => {
         throw error;
     }
 };
+
+export const updateUserProfile = async (user: any) => {
+    try {
+        const response = await api.post('/update-user-profile', user, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        throw error;
+    }
+};

@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getUser } from '../../Auth/service';
+import { getUser, updateUserProfile } from '../../Auth/service';
 import Sidebar from '../home/Sidebar';
 import '../home/home.css';
 import './profile.css';
@@ -160,9 +160,31 @@ function Profile() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        toast.success('Profile updated successfully!');
         setIsEditing(false);
-        console.log('Profile data:', formData);
+        try {
+            const paylaod = {
+                name: formData.name,
+                email: formData.email,
+                phone: `${formData.countryCode} ${formData.phone}`,
+                address: formData.address,
+                city: formData.city,
+                state: formData.state,
+                zip: formData.zip,
+                country: formData.country,
+            }
+
+            updateUserProfile(paylaod).then((response) => {
+                if (response.data.status === 200) {
+                    toast.success(response.data.message);
+                } else {
+                    toast.error(response.data.message);
+                }
+            }).catch((error) => {
+                toast.error(error.response?.data?.message || 'Failed to update profile');
+            });
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || 'Failed to update profile');
+        }
     };
 
     const getInitials = (name: string) => {
