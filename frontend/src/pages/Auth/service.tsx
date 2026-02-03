@@ -42,3 +42,23 @@ export const getUser = async () => {
         throw error;
     }
 };
+
+export const forgotPassword = async (email: string) => {
+    try {
+        const response = await api.post('/forgot-password', { email });
+        return response;
+    } catch (error) {
+        console.error('Error forgotting password:', error);
+        throw error;
+    }
+};
+
+export const resetPassword = async (data: any) => {
+    try {
+        const response = await api.post('/reset-password', data);
+        return response;
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        throw error;
+    }
+};

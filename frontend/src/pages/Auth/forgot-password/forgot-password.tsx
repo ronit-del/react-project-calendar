@@ -14,6 +14,8 @@ import {
 import { EmailOutlined, ArrowBack, SendOutlined } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../AuthLayout';
+import { forgotPassword } from '../service.tsx';
+import { toast } from "react-toastify";
 
 function ForgotPassword() {
     const navigate = useNavigate();
@@ -44,15 +46,26 @@ function ForgotPassword() {
         setLoading(true);
         
         try {
-            // TODO: Replace with actual forgot password API call
-            // const response = await forgotPassword(email);
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            forgotPassword(email).then((response: any) => {
+                if (response && response.data.status === 200) {
+                    toast.success(response.data.message);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1000);
+                    setSuccess(true);
+                    setLoading(false);
+
+                } else {
+                    toast.error(response.data.message);
+                    setLoading(false);
+                }
+            }).catch((error: any) => {
+                toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
+                setLoading(false);
+            });
             
-            setSuccess(true);
         } catch (error: any) {
             setError(error.response?.data?.message || "Something went wrong. Please try again.");
-        } finally {
             setLoading(false);
         }
     };

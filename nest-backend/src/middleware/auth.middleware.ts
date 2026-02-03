@@ -33,7 +33,11 @@ export class AuthMiddleware implements NestMiddleware {
 
       next();
     } catch (error) {
-      throw new UnauthorizedException(error.message || 'Invalid or expired token');
+      if (error.message === 'jwt expired') {
+        throw new UnauthorizedException('Session expired. Please login again.');
+      } else {
+        throw new UnauthorizedException(error.message || 'Invalid or expired token');
+      }
     }
   }
 }

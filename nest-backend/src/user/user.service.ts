@@ -14,6 +14,10 @@ export class UserService {
         return this.userModel.create(user);
     }
 
+    updateUserPassword(id: string, password: string) {
+        return this.userModel.findOneAndUpdate({ _id: id }, { password });
+    }
+
     updateUser(id: string, user: User) {
         return this.userModel.findByIdAndUpdate(id, user);
     }
