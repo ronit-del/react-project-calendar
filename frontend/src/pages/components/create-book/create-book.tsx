@@ -46,6 +46,7 @@ function CreateBook() {
         coverType: "",
         coverImage: "",
         price: "49.99",
+        coverImagePreview: "",
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -126,6 +127,7 @@ function CreateBook() {
                     title: "",
                     coverType: "",
                     coverImage: "",
+                    coverImagePreview: "",
                     price: "49.99",
                 });
                 // Optionally navigate to a books list page
@@ -211,60 +213,112 @@ function CreateBook() {
                                             getOptionLabel={(option) => option.label}
                                             value={coverTypeOptions.find(c => c.value === formData.coverType) || null}
                                             onChange={(_, newValue) => {
-                                            handleSelectChange({
-                                                target: {
-                                                    name: "coverType",
-                                                    value: newValue?.label || "",
-                                                },
-                                            });
+                                                handleSelectChange({
+                                                    target: {
+                                                        name: "coverType",
+                                                        value: newValue?.value || "",
+                                                    },
+                                                });
                                             }}
                                             renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                required
-                                                label="Cover Type"
-                                                className="auth-input"
-                                                InputProps={{
-                                                ...params.InputProps,
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                    <MenuBookIcon className="input-icon" />
-                                                    </InputAdornment>
-                                                ),
-                                                }}
-                                                sx={{
-                                                '& .MuiOutlinedInput-root': {
-                                                    borderRadius: 2,
-                                                },
-                                                }}
-                                            />
+                                                <TextField
+                                                    {...params}
+                                                    required
+                                                    label="Cover Type"
+                                                    className="auth-input"
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                <MenuBookIcon className="input-icon" />
+                                                            </InputAdornment>
+                                                        ),
+                                                    }}
+                                                    sx={{
+                                                        '& .MuiOutlinedInput-root': {
+                                                            borderRadius: 2,
+                                                        },
+                                                    }}
+                                                />
                                             )}
                                             sx={{
-                                            '& .MuiOutlinedInput-root': { borderRadius: 2 },
+                                                '& .MuiOutlinedInput-root': { borderRadius: 2 },
                                             }}
                                         />
                                     </Grid>
 
-                                    <Grid size={{ xs: 12 }}>
-                                        <TextField
+                                    <Grid size={{ xs: 12, md: 6 }}>
+                                        <Button
+                                            variant="outlined"
+                                            component="label"
                                             fullWidth
-                                            label="Cover Image"
-                                            name="coverImage"
-                                            value={formData.coverImage}
-                                            onChange={handleChange}
-                                            error={!!errors.coverImage}
-                                            helperText={errors.coverImage}
-                                            required
-                                            multiline
-                                            rows={4}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start" sx={{ alignSelf: "flex-start", mt: 1 }}>
-                                                        <WallpaperIcon color="action" />
-                                                    </InputAdornment>
-                                                ),
+                                            startIcon={<WallpaperIcon />}
+                                            sx={{ 
+                                                justifyContent: "flex-start", py: 2,
+                                                border: '1px solid rgb(238 238 238)',
+                                                borderColor: 'rgb(127 132 136 / 50%) !important',
+                                                color: 'rgb(126 122 122) !important',
                                             }}
-                                        />
+                                        >
+                                            {
+                                                formData.coverImagePreview 
+                                                    ? 
+                                                <span style={{ textTransform: 'capitalize' }}>
+                                                    Change Cover Image
+                                                </span> 
+                                                    : 
+                                                <span style={{ textTransform: 'capitalize' }}>
+                                                    Upload Cover Image
+                                                </span>
+                                            }
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                hidden
+                                                name="coverImage"
+                                                onChange={(e) => {
+                                                    const file = e.target?.files?.[0];
+                                                    if (file) {
+                                                    setFormData({
+                                                        ...formData,
+                                                        coverImage: file?.name || "",
+                                                        coverImagePreview: URL.createObjectURL(file),
+                                                    });
+                                                    }
+                                                }}
+                                                style={{
+                                                    border: '1px solid rgb(238 238 238)',
+                                                    borderColor: 'rgb(127 132 136 / 50%) !important',
+                                                    backgroundColor: 'var(--variant-outline;color: #4a78a6;lor) !important',
+                                                    color: '#4a78a6 !important',
+                                                }}
+                                            />
+                                        </Button>
+
+                                        {errors.coverImage && (
+                                            <Typography color="error">{errors.coverImage}</Typography>
+                                        )}
+
+                                        {formData.coverImagePreview && (
+                                            <Box mt={2} 
+                                                sx={{ width: '200px',
+                                                    border: '2px solid #7eadff',
+                                                    borderRadius: '10px',
+                                                    overflow: "hidden",
+                                                }}
+                                            >
+                                                <img
+                                                    src={formData.coverImagePreview}
+                                                    alt="Cover preview"
+                                                    style={{
+                                                        width: "100%",
+                                                        maxHeight: 300,
+                                                        objectFit: "cover",
+                                                        borderRadius: 8,
+                                                    }}
+                                                />
+                                            </Box>
+                                        )}
                                     </Grid>
 
                                     <Grid size={{ xs: 12, md: 6 }}>
@@ -297,6 +351,7 @@ function CreateBook() {
                                                         title: "",
                                                         coverType: "",
                                                         coverImage: "",
+                                                        coverImagePreview: "",
                                                         price: "49.99",
                                                     });
                                                     setErrors({});
