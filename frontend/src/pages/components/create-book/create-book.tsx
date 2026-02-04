@@ -11,17 +11,15 @@ import {
     Button,
     InputAdornment,
     CircularProgress,
+    Autocomplete,
 } from "@mui/material";
 import { Grid } from "@mui/material";
 import {
     Menu as MenuIcon,
     Title as TitleIcon,
-    Person as PersonIcon,
-    Description as DescriptionIcon,
-    Book as BookIcon,
-    CalendarToday as CalendarIcon,
-    Category as CategoryIcon,
     AttachMoney as PriceIcon,
+    MenuBook as MenuBookIcon,
+    Wallpaper as WallpaperIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -36,15 +34,18 @@ function CreateBook() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+    const coverTypeOptions = [
+        { value: "softcover", label: "Softcover" },
+        { value: "hardcover", label: "Hardcover" },
+        { value: "audiobook", label: "Audiobook" },
+        { value: "ebook", label: "Ebook" },
+    ];
+
     const [formData, setFormData] = useState({
         title: "",
-        author: "",
-        description: "",
-        isbn: "",
-        publicationDate: "",
-        genre: "",
-        price: "",
-        publisher: "",
+        coverType: "",
+        coverImage: "",
+        price: "49.99",
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -80,36 +81,24 @@ function CreateBook() {
             newErrors.title = "Title is required";
         }
 
-        if (!formData.author.trim()) {
-            newErrors.author = "Author is required";
+        if (!formData.coverType.trim()) {
+            newErrors.coverType = "Cover type is required";
         }
 
-        if (!formData.description.trim()) {
-            newErrors.description = "Description is required";
-        } else if (formData.description.trim().length < 50) {
-            newErrors.description = "Description must be at least 50 characters";
-        }
-
-        if (!formData.isbn.trim()) {
-            newErrors.isbn = "ISBN is required";
-        } else if (!/^(?:\d{10}|\d{13})$/.test(formData.isbn.replace(/[-\s]/g, ""))) {
-            newErrors.isbn = "ISBN must be 10 or 13 digits";
-        }
-
-        if (!formData.publicationDate) {
-            newErrors.publicationDate = "Publication date is required";
-        }
-
-        if (!formData.genre.trim()) {
-            newErrors.genre = "Genre is required";
-        }
-
-        if (formData.price && isNaN(Number(formData.price))) {
-            newErrors.price = "Price must be a valid number";
+        if (!formData.coverImage.trim()) {
+            newErrors.coverImage = "Cover image is required";
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSelectChange = (e: any) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+        setError("");
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -135,13 +124,9 @@ function CreateBook() {
                 // Reset form
                 setFormData({
                     title: "",
-                    author: "",
-                    description: "",
-                    isbn: "",
-                    publicationDate: "",
-                    genre: "",
-                    price: "",
-                    publisher: "",
+                    coverType: "",
+                    coverImage: "",
+                    price: "49.99",
                 });
                 // Optionally navigate to a books list page
                 // navigate('/books');
@@ -221,21 +206,41 @@ function CreateBook() {
                                     </Grid>
 
                                     <Grid size={{ xs: 12, md: 6 }}>
-                                        <TextField
-                                            fullWidth
-                                            label="Author"
-                                            name="author"
-                                            value={formData.author}
-                                            onChange={handleChange}
-                                            error={!!errors.author}
-                                            helperText={errors.author}
-                                            required
-                                            InputProps={{
+                                        <Autocomplete
+                                            options={coverTypeOptions}
+                                            getOptionLabel={(option) => option.label}
+                                            value={coverTypeOptions.find(c => c.value === formData.coverType) || null}
+                                            onChange={(_, newValue) => {
+                                            handleSelectChange({
+                                                target: {
+                                                    name: "coverType",
+                                                    value: newValue?.label || "",
+                                                },
+                                            });
+                                            }}
+                                            renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                required
+                                                label="Cover Type"
+                                                className="auth-input"
+                                                InputProps={{
+                                                ...params.InputProps,
                                                 startAdornment: (
                                                     <InputAdornment position="start">
-                                                        <PersonIcon color="action" />
+                                                    <MenuBookIcon className="input-icon" />
                                                     </InputAdornment>
                                                 ),
+                                                }}
+                                                sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderRadius: 2,
+                                                },
+                                                }}
+                                            />
+                                            )}
+                                            sx={{
+                                            '& .MuiOutlinedInput-root': { borderRadius: 2 },
                                             }}
                                         />
                                     </Grid>
@@ -243,83 +248,19 @@ function CreateBook() {
                                     <Grid size={{ xs: 12 }}>
                                         <TextField
                                             fullWidth
-                                            label="Description"
-                                            name="description"
-                                            value={formData.description}
+                                            label="Cover Image"
+                                            name="coverImage"
+                                            value={formData.coverImage}
                                             onChange={handleChange}
-                                            error={!!errors.description}
-                                            helperText={errors.description || "Minimum 50 characters"}
+                                            error={!!errors.coverImage}
+                                            helperText={errors.coverImage}
                                             required
                                             multiline
                                             rows={4}
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start" sx={{ alignSelf: "flex-start", mt: 1 }}>
-                                                        <DescriptionIcon color="action" />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-
-                                    <Grid size={{ xs: 12, md: 6 }}>
-                                        <TextField
-                                            fullWidth
-                                            label="ISBN"
-                                            name="isbn"
-                                            value={formData.isbn}
-                                            onChange={handleChange}
-                                            error={!!errors.isbn}
-                                            helperText={errors.isbn || "10 or 13 digits"}
-                                            required
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <BookIcon color="action" />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-
-                                    <Grid size={{ xs: 12, md: 6 }}>
-                                        <TextField
-                                            fullWidth
-                                            label="Genre"
-                                            name="genre"
-                                            value={formData.genre}
-                                            onChange={handleChange}
-                                            error={!!errors.genre}
-                                            helperText={errors.genre}
-                                            required
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <CategoryIcon color="action" />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-
-                                    <Grid size={{ xs: 12, md: 6 }}>
-                                        <TextField
-                                            fullWidth
-                                            label="Publication Date"
-                                            name="publicationDate"
-                                            type="date"
-                                            value={formData.publicationDate}
-                                            onChange={handleChange}
-                                            error={!!errors.publicationDate}
-                                            helperText={errors.publicationDate}
-                                            required
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <CalendarIcon color="action" />
+                                                        <WallpaperIcon color="action" />
                                                     </InputAdornment>
                                                 ),
                                             }}
@@ -331,32 +272,16 @@ function CreateBook() {
                                             fullWidth
                                             label="Price"
                                             name="price"
-                                            type="number"
                                             value={formData.price}
                                             onChange={handleChange}
                                             error={!!errors.price}
                                             helperText={errors.price}
+                                            required
+                                            disabled={true}
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
                                                         <PriceIcon color="action" />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-
-                                    <Grid size={{ xs: 12 }}>
-                                        <TextField
-                                            fullWidth
-                                            label="Publisher"
-                                            name="publisher"
-                                            value={formData.publisher}
-                                            onChange={handleChange}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <BookIcon color="action" />
                                                     </InputAdornment>
                                                 ),
                                             }}
@@ -370,13 +295,9 @@ function CreateBook() {
                                                 onClick={() => {
                                                     setFormData({
                                                         title: "",
-                                                        author: "",
-                                                        description: "",
-                                                        isbn: "",
-                                                        publicationDate: "",
-                                                        genre: "",
-                                                        price: "",
-                                                        publisher: "",
+                                                        coverType: "",
+                                                        coverImage: "",
+                                                        price: "49.99",
                                                     });
                                                     setErrors({});
                                                 }}
