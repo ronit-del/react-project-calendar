@@ -37,8 +37,6 @@ function CreateBook() {
     const coverTypeOptions = [
         { value: "softcover", label: "Softcover" },
         { value: "hardcover", label: "Hardcover" },
-        { value: "audiobook", label: "Audiobook" },
-        { value: "ebook", label: "Ebook" },
     ];
 
     const [formData, setFormData] = useState({
@@ -66,7 +64,7 @@ function CreateBook() {
             ...prev,
             [name]: value,
         }));
-        // Clear error when user starts typing
+
         if (errors[name]) {
             setErrors((prev) => ({
                 ...prev,
@@ -211,6 +209,7 @@ function CreateBook() {
                                         <Autocomplete
                                             options={coverTypeOptions}
                                             getOptionLabel={(option) => option.label}
+                                            isOptionEqualToValue={(option, value) => option.value === value.value }
                                             value={coverTypeOptions.find(c => c.value === formData.coverType) || null}
                                             onChange={(_, newValue) => {
                                                 handleSelectChange({

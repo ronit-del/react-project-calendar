@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { MailModule } from './mail/mail.module';
+import { CreateBoookModule } from './create-boook/create-boook.module';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -25,7 +26,8 @@ if (!mongoUri) {
       socketTimeoutMS: 45000,
     }),
     AuthModule,
-    MailModule
+    MailModule,
+    CreateBoookModule
   ],
   controllers: [AppController],
   providers: [AppService],
